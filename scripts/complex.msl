@@ -1,0 +1,23 @@
+//! msl_version: 0.1.0
+//! payload_format: RSON
+
+IfSet("FOO") [
+    1.0: WaitForEvent("Foo"),
+    +2.0: {
+        Tc {
+            cmd: CmdEcho
+        }
+    },
+    +1.0: Stop
+],
+IfSet("BAR") [
+    1.0: WaitForEventTimeout("Bar", 10.0),
+    +IfTimeout [
+        Stop
+    ],
+    +IfNotTimeout [
+        {
+            CmdEcho("Bar event has fired")
+        }
+    ]
+]
